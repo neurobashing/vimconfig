@@ -55,23 +55,7 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-"map <leader>l :Align
-"nmap <leader>a :Ack<space>
-"nmap <leader>b :CtrlPBuffer<CR>
-"nmap <leader>d :NERDTreeToggle<CR>
-"nmap <leader>f :NERDTreeFind<CR>
-"nmap <leader>t :CtrlP<CR>
-"nmap <leader>T :CtrlPClearCache<CR>:CtrlP<CR>
-"" nmap <leader>] :TagbarToggle<CR>
-"nmap <leader><space> :call whitespace#strip_trailing()<CR>
-"nmap <leader>g :GitGutterToggle<CR>
-"nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
-
-" plugin settings
-" let g:ctrlp_match_window = 'order:ttb,max:20'
-" let g:NERDSpaceDelims=1
-" let g:gitgutter_enabled = 0
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -120,7 +104,7 @@ set bg=dark
 if (&t_Co == 256 || has('gui_running'))
   colorscheme spacegray
 endif
-set guifont=Hack:h14"set guifont=Menlo:h14
+set guifont=Hack:h14
 set guioptions-=T
 set visualbell " fuck donk noises
 set cursorline " highlight the current line
@@ -143,6 +127,7 @@ au FileType snippet setlocal ts=8 sts=8 sw=8 noet
 
 " when you select a file in the loclist/quickfind, close it
 autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>
+autocmd FileType gitconfig setlocal noet ci pi ts=4 sts=0 sw=4
 
 set wildignore+=.hg,.git,.svn                    " Version control
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
