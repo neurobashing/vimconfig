@@ -10,6 +10,9 @@ Plugin 'mtth/scratch.vim' " https://github.com/mtth/scratch.vim
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars' " https://github.com/mustache/vim-mustache-handlebars
 Plugin 'vim-perl/vim-perl' "https://github.com/vim-perl/vim-perl
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -71,7 +74,10 @@ inoremap jj <ESC>
 set bg=dark
 " gui settings
 if (&t_Co == 256 || has('gui_running'))
-        colorscheme spacegray
+        colorscheme ir_black
+        " colorscheme spacegray
+else
+    colorscheme ir_black
 endif
 set guifont=Hack:h14
 set guioptions-=T
