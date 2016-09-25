@@ -103,6 +103,7 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 " au FileType make set noexpandtab
 autocmd FileType sh setlocal ts=4 sts=4 sw=4
 autocmd FileType vim setlocal ts=4 sts=4 sw=4
+autocmd FileType zsh setlocal ts=4 sts=4 sw=4
 
 " when you select a file in the loclist/quickfind, close it
 autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>
