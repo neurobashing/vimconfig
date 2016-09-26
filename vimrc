@@ -13,6 +13,7 @@ Plugin 'vim-perl/vim-perl' "https://github.com/vim-perl/vim-perl
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'mhinz/vim-grepper'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -75,6 +76,7 @@ set bg=dark
 " gui settings
 if (&t_Co == 256 || has('gui_running'))
         colorscheme ir_black
+        hi SpecialKey guibg=black
         " colorscheme spacegray
 else
     colorscheme ir_black
