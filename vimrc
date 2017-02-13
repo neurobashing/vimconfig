@@ -13,7 +13,11 @@ Plugin 'vim-perl/vim-perl' "https://github.com/vim-perl/vim-perl
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'mhinz/vim-grepper'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'nvie/vim-flake8'
+Plugin 'scrooloose/syntastic'
+Plugin 'alessandroyorba/sidonia' " colorscheme sidona, https://github.com/AlessandroYorba/Sidonia
+Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -75,9 +79,10 @@ inoremap jj <ESC>
 set bg=dark
 " gui settings
 if (&t_Co == 256 || has('gui_running'))
-        colorscheme ir_black
-        hi SpecialKey guibg=black
-        " colorscheme spacegray
+    set termguicolors " this is a vim 8 thing?
+    colorscheme ir_black
+    hi SpecialKey guibg=black
+    " colorscheme spacegray
 else
     colorscheme ir_black
 endif
@@ -88,6 +93,7 @@ set cursorline " highlight the current line
 
 " fix indents etc
 autocmd BufNewFile,BufRead *.py setlocal ts=4 sts=4 sw=4
+autocmd BufNewFile,BufRead *.js setlocal ts=4 sts=4 sw=4
 autocmd BufNewFile,BufRead *.pl,*.pm,*.cgi,*.tt2 setlocal noet ci pi ts=4 sts=0 sw=4
 autocmd BufNewFile,BufRead *.html setlocal ts=4 sts=4 sw=4
 autocmd BufNewFile,BufRead *.md setlocal ts=4 sts=4 sw=4
@@ -95,8 +101,8 @@ au BufNewFile,BufRead *.tt2 setf tt2html " or just setf tt2 if there's no HTML a
 au BufNewFile,BufRead *.tt2 setlocal noet ci pi ts=4 sts=0 sw=4
 au FileType python setlocal omnifunc=pythoncomplete#Complete
 " but this is our dumb-ass method
-autocmd BufNewFile,BufRead *.js setlocal noet ci pi ts=4 sts=0 sw=4
-autocmd FileType javascript setlocal noet ci pi ts=4 sts=0 sw=4
+autocmd BufNewFile,BufRead *.js setlocal ci pi ts=4 sts=0 sw=4
+autocmd FileType javascript setlocal ci pi ts=4 sts=0 sw=4
 " this is how the rest fo the world does it
 " autocmd BufNewFile,BufRead *.js setlocal ts=2 sts=2 sw=2
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -157,8 +163,12 @@ au Filetype perl vmap <F2> :Tidy<CR>
 
 command! -nargs=* Bounce !ssh gthomason@dev-gthomason "web bounce" <CR>
 command! -nargs=* SBounce !ssh gthomason@services-gthomason "~/bin/bounce.sh" <CR>
-
 command! -nargs=1 Jira execute 'silent !open https://jira.thinkgeek.com/browse/SPHORB-<args>'
+
+fun! PerlSyntax()
+    :!perl -c %
+endfun
+nnoremap <leader>PC :execute PerlSyntax()<CR>
 
 fun! FindFixme()
         :lvimgrep /TODO\|FIXME/gj %
@@ -168,3 +178,4 @@ nmap <leader>F :call FindFixme()<CR>
 
 " turn completion on but don't scan included files
 set complete=.,w,b,u,t,
+
