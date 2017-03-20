@@ -18,6 +18,8 @@ Plugin 'nvie/vim-flake8'
 Plugin 'scrooloose/syntastic'
 Plugin 'alessandroyorba/sidonia' " colorscheme sidona, https://github.com/AlessandroYorba/Sidonia
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
+Plugin 'vimwiki/vimwiki'
+Plugin 'ctrlpvim/ctrlp.vim.git'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -179,3 +181,12 @@ nmap <leader>F :call FindFixme()<CR>
 " turn completion on but don't scan included files
 set complete=.,w,b,u,t,
 
+" vimwiki
+let g:vimwiki_list = [{'path': '~/Documents/wiki/', 'path_html': '~/Public/wiki/'}]
+
+let g:syntastic_python_checkers=['flake8'] " use flake8 instead of pylint, for now
+
+" :w!!
+" write the file when you accidentally opened it without the right (root) privileges
+" I got this from the CIA
+cmap w!! w !sudo tee % > /dev/null
