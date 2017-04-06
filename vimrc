@@ -46,6 +46,12 @@ set wildmode=longest,list,full
 set mouse=a " Enable basic mouse behavior such as resizing buffers.
 set hidden
 
+""""" folding
+set foldenable
+set foldlevelstart=10 " open most folds by default
+set foldnestmax=10 " at most, 10 nested folds
+set foldmethod=indent " could be: marker, manual, expr, syntax, diff
+
 " keyboard shortcuts
 " let mapleader = ','
 map <C-h> <C-w>h
@@ -57,9 +63,12 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 imap <c-l> <space>=><space>
 imap <c-k> ->
 nmap <leader>] :TagbarToggle<CR>
-nmap <D-/> :Commentary<CR>
-vmap <D-/> :Commentary<CR>
-
+" in macvim, we use D for command, but we can't do that in the terminal
+" also note that this ctrl-/
+nmap <C-_> :Commentary<CR>
+vmap <C-_> :Commentary<CR>
+" space in normal mode handles folds
+nnoremap <space> za
 " md is markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
@@ -114,6 +123,7 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType sh setlocal ts=4 sts=4 sw=4
 autocmd FileType vim setlocal ts=4 sts=4 sw=4
 autocmd FileType zsh setlocal ts=4 sts=4 sw=4
+autocmd FileType perl setlocal noet ci pi ts=4 sts=0 sw=4
 
 " when you select a file in the loclist/quickfind, close it
 autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>
