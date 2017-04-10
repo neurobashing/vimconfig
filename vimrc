@@ -200,3 +200,5 @@ let g:syntastic_python_checkers=['flake8'] " use flake8 instead of pylint, for n
 " write the file when you accidentally opened it without the right (root) privileges
 " I got this from the CIA
 cmap w!! w !sudo tee % > /dev/null
+
+let g:airline#extensions#tagbar#enabled = 1
