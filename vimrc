@@ -58,6 +58,7 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 " insert a fat comma w/ ctrl l
 imap <c-l> <space>=><space>
@@ -146,6 +147,42 @@ nnoremap <leader>Ft mZggVG=`Zzz
 nnoremap H 0
 nnoremap L $
 
+set showtabline=2 " always show tabs
+"function! GuiTabLabel()
+"  let label = ''
+"  let bufnrlist = tabpagenr(v:lnum)
+"  " let bufnrlist = tabpagebuflist(v:lnum)
+"  " Add '+' if one of the buffers in the tab page is modified
+"  if bufnrlist > 0
+"      for bufnr in bufnrlist
+"        if getbufvar(bufnr, "&modified")
+"          let label = '+'
+"          break
+"        endif
+"      endfor
+"      " Append the tab number
+"      let label .= v:lnum.': '
+"      " Append the buffer name
+"      let name = bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+"      if name == ''
+"        " give a name to no-name documents
+"        if &buftype=='quickfix'
+"          let name = '[Quickfix List]'
+"        else
+"          let name = '[No Name]'
+"        endif
+"      else
+"        " get only the file name
+"        let name = fnamemodify(name,":t")
+"      endif
+"      let label .= name
+"      " Append the number of windows in the tab page
+"      let wincount = tabpagewinnr(v:lnum, '$')
+"      return label . '  [' . wincount . ']'
+"    endif
+"endfunction
+" set tabline=%{GuiTabLabel()}
+
 set statusline=%t\        "tail of the filename
 set statusline+=\ %h      "help file flag
 set statusline+=\ %m      "modified flag
@@ -201,4 +238,34 @@ let g:syntastic_python_checkers=['flake8'] " use flake8 instead of pylint, for n
 " I got this from the CIA
 cmap w!! w !sudo tee % > /dev/null
 
+" always open files in new buffers
+let g:ctrlp_switch_buffer = 0
+" change the working directory during a Vim session and make CtrlP respect that change.
+let g:ctrlp_working_path_mode = 0
+
+if filereadable('/usr/local/bin/ag')
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+elseif filereadable('/usr/bin/ag')
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+elseif filereadable('~/bin/ack')
+    let g:ctrlp_user_command = 'ack %s -f --nocolor'
+else
+     let g:ctrlp_user_command = ''
+endif
+
 let g:airline#extensions#tagbar#enabled = 1
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    let &relativenumber = 0
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <C-n> :call NumberToggle()<cr>
+" haven't decided if i want to use this but, enter number when inserting and
+" relative number for leaving insert mode.
+" autocmd InsertEnter * :set number
+" autocmd InsertLeave * :set relativenumber
