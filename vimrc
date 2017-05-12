@@ -20,6 +20,8 @@ Plugin 'alessandroyorba/sidonia' " colorscheme sidona, https://github.com/Alessa
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 Plugin 'vimwiki/vimwiki'
 Plugin 'ctrlpvim/ctrlp.vim.git'
+Plugin 'SirVer/ultisnips'
+Plugin 'neurobashing/snipmate-snippets.git'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -92,7 +94,8 @@ set bg=dark
 " gui settings
 if (&t_Co == 256 || has('gui_running'))
     set termguicolors " this is a vim 8 thing?
-    colorscheme ir_black
+    " colorscheme ir_black
+    colorscheme sidonia
     hi SpecialKey guibg=black
     " colorscheme spacegray
 else
@@ -242,6 +245,8 @@ cmap w!! w !sudo tee % > /dev/null
 let g:ctrlp_switch_buffer = 0
 " change the working directory during a Vim session and make CtrlP respect that change.
 let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window = 'top,order:btt,min:1,max:10,results:10'
+
 
 if filereadable('/usr/local/bin/ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -254,6 +259,7 @@ else
 endif
 
 let g:airline#extensions#tagbar#enabled = 1
+let g:airline_theme='vice'
 
 function! NumberToggle()
   if(&relativenumber == 1)
@@ -280,3 +286,4 @@ else
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
