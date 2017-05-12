@@ -151,40 +151,6 @@ nnoremap H 0
 nnoremap L $
 
 set showtabline=2 " always show tabs
-"function! GuiTabLabel()
-"  let label = ''
-"  let bufnrlist = tabpagenr(v:lnum)
-"  " let bufnrlist = tabpagebuflist(v:lnum)
-"  " Add '+' if one of the buffers in the tab page is modified
-"  if bufnrlist > 0
-"      for bufnr in bufnrlist
-"        if getbufvar(bufnr, "&modified")
-"          let label = '+'
-"          break
-"        endif
-"      endfor
-"      " Append the tab number
-"      let label .= v:lnum.': '
-"      " Append the buffer name
-"      let name = bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
-"      if name == ''
-"        " give a name to no-name documents
-"        if &buftype=='quickfix'
-"          let name = '[Quickfix List]'
-"        else
-"          let name = '[No Name]'
-"        endif
-"      else
-"        " get only the file name
-"        let name = fnamemodify(name,":t")
-"      endif
-"      let label .= name
-"      " Append the number of windows in the tab page
-"      let wincount = tabpagewinnr(v:lnum, '$')
-"      return label . '  [' . wincount . ']'
-"    endif
-"endfunction
-" set tabline=%{GuiTabLabel()}
 
 set statusline=%t\        "tail of the filename
 set statusline+=\ %h      "help file flag
