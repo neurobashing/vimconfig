@@ -95,16 +95,15 @@ set bg=dark
 if (&t_Co == 256 || has('gui_running'))
     set termguicolors " this is a vim 8 thing?
     " colorscheme ir_black
-    colorscheme sidonia
-    hi SpecialKey guibg=black
-    " colorscheme spacegray
+    " hi SpecialKey guibg=black
+    colorscheme spacegray
 else
     colorscheme ir_black
 endif
 set guifont=Hack:h14
-set guioptions-=T
-set visualbell " fuck donk noises
-set cursorline " highlight the current line
+set guioptions-=T   " get rid of toolbar
+set visualbell      " fuck donk noises
+set cursorline      " highlight the current line
 
 " fix indents etc
 autocmd BufNewFile,BufRead *.py setlocal ts=4 sts=4 sw=4
@@ -225,6 +224,8 @@ else
 endif
 
 let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_section_z = ''
 let g:airline_theme='vice'
 
 function! NumberToggle()
