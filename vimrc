@@ -92,14 +92,11 @@ inoremap jj <ESC>
 
 set bg=dark
 " gui settings
-if (&t_Co == 256 || has('gui_running'))
-    set termguicolors " this is a vim 8 thing?
-    " colorscheme ir_black
-    " hi SpecialKey guibg=black
-    colorscheme spacegray
-else
-    colorscheme ir_black
-endif
+set termguicolors " this is a vim 8 thing?
+" colorscheme ir_black
+" hi SpecialKey guibg=black
+" dues is not bad for a dark background
+colorscheme spacegray
 set guifont=Hack:h14
 set guioptions-=T   " get rid of toolbar
 set visualbell      " fuck donk noises
@@ -210,7 +207,6 @@ cmap w!! w !sudo tee % > /dev/null
 let g:ctrlp_switch_buffer = 0
 " change the working directory during a Vim session and make CtrlP respect that change.
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_match_window = 'top,order:btt,min:1,max:10,results:10'
 
 
 if filereadable('/usr/local/bin/ag')
