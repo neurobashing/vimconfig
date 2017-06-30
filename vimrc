@@ -16,6 +16,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree.git'
 Plugin 'alessandroyorba/sidonia' " colorscheme sidona, https://github.com/AlessandroYorba/Sidonia
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 Plugin 'vimwiki/vimwiki'
@@ -67,7 +68,9 @@ imap <c-l> <space>=><space>
 imap <c-k> ->
 nmap <leader>] :TagbarToggle<CR>
 " in macvim, we use D for command, but we can't do that in the terminal
+" this ^^ used to work but now it doesn't; why?
 " also note that this ctrl-/
+" ^^^ this also doesn't work, it's a literal _
 nmap <C-_> :Commentary<CR>
 vmap <C-_> :Commentary<CR>
 " space in normal mode handles folds
@@ -79,8 +82,6 @@ autocmd VimResized * :wincmd =
 
 set listchars=tab:▸\ ,eol:¬,trail:·
 set laststatus=2
-" in theory this will fix fugitive problems
-set shell=/bin/bash
 
 " replicate cmd-[ and cmd-] (eg from bbedit)
 " to move visual selection
@@ -221,6 +222,9 @@ endif
 
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
+if has("gui_macvim")
+    let g:airline_powerline_fonts = 1
+endif
 let g:airline_section_z = ''
 let g:airline_theme='vice'
 
@@ -250,3 +254,13 @@ else
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
+" NERDTree
+" why can't I fucking toggle with , dammit
+map <C-i> :NERDTreeToggle<CR>
+" open nerdtree if started with no arguments
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" open nerdtree if started with a dir as an argument
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
