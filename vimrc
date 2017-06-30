@@ -226,7 +226,7 @@ if has("gui_macvim")
     let g:airline_powerline_fonts = 1
 endif
 let g:airline_section_z = ''
-let g:airline_theme='vice'
+let g:airline_theme='jellybeans'
 
 function! NumberToggle()
   if(&relativenumber == 1)
@@ -257,10 +257,11 @@ endif
 " NERDTree
 " why can't I fucking toggle with , dammit
 map <C-i> :NERDTreeToggle<CR>
+" these two don't work with macvim
 " open nerdtree if started with no arguments
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" open nerdtree if started with a dir as an argument
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" " open nerdtree if started with a dir as an argument
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
