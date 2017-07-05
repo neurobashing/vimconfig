@@ -265,3 +265,25 @@ map <C-i> :NERDTreeToggle<CR>
 " " open nerdtree if started with a dir as an argument
 " autocmd StdinReadPre * let s:std_in=1
 " autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+" these call the DropSync configs.
+" the applescript looks like this:
+" tell application "DropSync 3"
+"   set our_store to store named "katamari"
+"   sync our_store direction DestinationRight
+" end tell
+function! SyncKatamari()
+    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+endfunction
+
+function! SyncKatamari()
+    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+endfunction
+
+function! SyncKatamari()
+    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+endfunction
+
+command! SyncKatamari call SyncKatamari()
+command! SyncTGServices call SyncTGServices()
+command! SyncSphorb call SyncSphorb()
