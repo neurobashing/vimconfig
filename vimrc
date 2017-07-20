@@ -23,6 +23,7 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'ctrlpvim/ctrlp.vim.git'
 Plugin 'SirVer/ultisnips'
 Plugin 'neurobashing/snipmate-snippets.git'
+Plugin 'tpope/vim-dispatch'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -48,6 +49,7 @@ set wildmenu " show a navigable menu for tab completion
 set wildmode=longest,list,full
 set mouse=a " Enable basic mouse behavior such as resizing buffers.
 set hidden
+set listchars=tab:▸\ ,eol:¬,trail:·
 
 """"" folding
 set foldenable
@@ -80,8 +82,6 @@ autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
-set listchars=tab:▸\ ,eol:¬,trail:·
-set laststatus=2
 
 " replicate cmd-[ and cmd-] (eg from bbedit)
 " to move visual selection
@@ -99,7 +99,6 @@ set termguicolors " this is a vim 8 thing?
 " dues is not bad for a dark background
 colorscheme spacegray
 set guifont=Hack:h14
-set guioptions-=T   " get rid of toolbar
 set visualbell      " fuck donk noises
 set cursorline      " highlight the current line
 
@@ -148,6 +147,8 @@ nnoremap H 0
 nnoremap L $
 
 set showtabline=2 " always show tabs
+set guioptions-=T   " get rid of toolbar
+" set guioptions+=e to always show GUI tabs
 
 set statusline=%t\        "tail of the filename
 set statusline+=\ %h      "help file flag
@@ -176,14 +177,13 @@ au Filetype perl nmap <F2> :call DoTidy()<CR>
 "shortcut for visual mode to run on the the current visual selection"
 au Filetype perl vmap <F2> :Tidy<CR>
 
-command! -nargs=* Bounce !ssh gthomason@dev-gthomason "web bounce" <CR>
-command! -nargs=* SBounce !ssh gthomason@services-gthomason "~/bin/bounce.sh" <CR>
-command! -nargs=1 Jira execute 'silent !open https://jira.thinkgeek.com/browse/SPHORB-<args>'
+" these are now asynchronous. 
+command! -nargs=* Bounce :call job_start(['ssh', 'gthomason@dev-gthomason', 'web', 'bounce'])
+command! -nargs=* SBounce :call job_start('ssh', 'gthomason@services-gthomason', '~/bin/bounce.sh')
+command! -nargs=1 Jira :call job_start(['open', '-g', 'https://jira.thinkgeek.com/browse/SPHORB-<args>'])
 
-fun! PerlSyntax()
-    :!perl -c %
-endfun
-nnoremap <leader>PC :execute PerlSyntax()<CR>
+" We use the tpope Dispatch command. on fail, we get a quickfix window.
+nnoremap <leader>PC :Dispatch perl -c % <CR>
 
 fun! FindFixme()
         :lvimgrep /TODO\|FIXME/gj %
@@ -236,8 +236,8 @@ function! NumberToggle()
     set relativenumber
   endif
 endfunc
-
 nnoremap <C-n> :call NumberToggle()<cr>
+
 " haven't decided if i want to use this but, enter number when inserting and
 " relative number for leaving insert mode.
 " autocmd InsertEnter * :set number
@@ -257,14 +257,6 @@ endif
 " NERDTree
 " why can't I fucking toggle with , dammit
 map <C-i> :NERDTreeToggle<CR>
-" these two don't work with macvim
-" open nerdtree if started with no arguments
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" " open nerdtree if started with a dir as an argument
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
 " these call the DropSync configs.
 " the applescript looks like this:
@@ -273,17 +265,43 @@ map <C-i> :NERDTreeToggle<CR>
 "   sync our_store direction DestinationRight
 " end tell
 function! SyncKatamari()
-    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+    :call job_start(['osascript', '~/.config/bin/sync_katamari.scpt'])
 endfunction
 
-function! SyncKatamari()
-    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+function! SyncSphorb()
+    :call job_start(['osascript', '~/.config/bin/sync_sphorb.scpt'])
 endfunction
 
-function! SyncKatamari()
-    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
+function! SyncTGServices()
+    :call job_start(['osascript', '~/.config/bin/sync_tgservices.scpt'])
 endfunction
 
 command! SyncKatamari call SyncKatamari()
 command! SyncTGServices call SyncTGServices()
 command! SyncSphorb call SyncSphorb()
+
+" this is minpac and replaces Vundle
+" mkdir -p ~/.config/nvim/pack/minpac/opt
+" cd ~/.config/nvim/pack/minpac/opt
+" git clone https://github.com/k-takata/minpac.git
+"packadd minpac
+"call minpac#init()
+"" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
+"call minpac#add('k-takata/minpac', {'type': 'opt'})
+"call minpac#add('tpope/vim-commentary')
+"call minpac#add('majutsushi/tagbar')
+"call minpac#add('mtth/scratch.vim') " https://github.com/mtth/scratch.vim
+"call minpac#add('pangloss/vim-javascript')
+"call minpac#add('mustache/vim-mustache-handlebars') " https://github.com/mustache/vim-mustache-handlebars
+"call minpac#add('vim-perl/vim-perl') "https://github.com/vim-perl/vim-perl
+"call minpac#add('tpope/vim-fugitive')
+"call minpac#add('davidhalter/jedi-vim')
+"call minpac#add('nvie/vim-flake8')
+"call minpac#add('scrooloose/syntastic')
+"call minpac#add('scrooloose/nerdtree')
+"call minpac#add('colepeters/spacemacs-theme.vim') " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
+"call minpac#add('vimwiki/vimwiki')
+"call minpac#add('ctrlpvim/ctrlp.vim')
+"call minpac#add('SirVer/ultisnips')
+"call minpac#add('neurobashing/snipmate-snippets')
+"call minpac#add('ajh17/Spacegray.vim')
