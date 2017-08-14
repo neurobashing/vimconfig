@@ -17,13 +17,13 @@ Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree.git'
-Plugin 'alessandroyorba/sidonia' " colorscheme sidona, https://github.com/AlessandroYorba/Sidonia
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 Plugin 'vimwiki/vimwiki'
 Plugin 'ctrlpvim/ctrlp.vim.git'
 Plugin 'SirVer/ultisnips'
 Plugin 'neurobashing/snipmate-snippets.git'
 Plugin 'tpope/vim-dispatch'
+Plugin 'lifepillar/vim-solarized8'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -50,6 +50,7 @@ set wildmode=longest,list,full
 set mouse=a " Enable basic mouse behavior such as resizing buffers.
 set hidden
 set listchars=tab:▸\ ,eol:¬,trail:·
+set nohlsearch
 
 """"" folding
 set foldenable
@@ -82,6 +83,7 @@ autocmd BufRead,BufNewFile *.md set filetype=markdown
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
+nmap <leader>NI :noh<CR>
 
 " replicate cmd-[ and cmd-] (eg from bbedit)
 " to move visual selection
@@ -97,8 +99,9 @@ set termguicolors " this is a vim 8 thing?
 " colorscheme ir_black
 " hi SpecialKey guibg=black
 " dues is not bad for a dark background
+" colorscheme solarized8_dark
 colorscheme spacegray
-set guifont=Hack:h14
+set guifont=Hack:h14 " hack works by default w/ airline. others don't.
 set visualbell      " fuck donk noises
 set cursorline      " highlight the current line
 
@@ -177,7 +180,7 @@ au Filetype perl nmap <F2> :call DoTidy()<CR>
 "shortcut for visual mode to run on the the current visual selection"
 au Filetype perl vmap <F2> :Tidy<CR>
 
-" these are now asynchronous. 
+" these are now asynchronous!
 command! -nargs=* Bounce :call job_start(['ssh', 'gthomason@dev-gthomason', 'web', 'bounce'])
 command! -nargs=* SBounce :call job_start('ssh', 'gthomason@services-gthomason', '~/bin/bounce.sh')
 command! -nargs=1 Jira :call job_start(['open', '-g', 'https://jira.thinkgeek.com/browse/SPHORB-<args>'])
@@ -189,7 +192,7 @@ fun! FindFixme()
         :lvimgrep /TODO\|FIXME/gj %
         :lopen
 endfun
-nmap <leader>F :call FindFixme()<CR>
+nmap <leader>FM :call FindFixme()<CR>
 
 " turn completion on but don't scan included files
 set complete=.,w,b,u,t,
@@ -208,7 +211,7 @@ cmap w!! w !sudo tee % > /dev/null
 let g:ctrlp_switch_buffer = 0
 " change the working directory during a Vim session and make CtrlP respect that change.
 let g:ctrlp_working_path_mode = 0
-
+nmap <C-s> :CtrlPBuffer<CR>
 
 if filereadable('/usr/local/bin/ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -256,7 +259,7 @@ endif
 
 " NERDTree
 " why can't I fucking toggle with , dammit
-map <C-i> :NERDTreeToggle<CR>
+" map <C-i> :NERDTreeToggle<CR>
 
 " these call the DropSync configs.
 " the applescript looks like this:
@@ -264,22 +267,22 @@ map <C-i> :NERDTreeToggle<CR>
 "   set our_store to store named "katamari"
 "   sync our_store direction DestinationRight
 " end tell
+" it looks like the whole thing fails if you call job_start
 function! SyncKatamari()
-    :call job_start(['osascript', '~/.config/bin/sync_katamari.scpt'])
+    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
 endfunction
 
 function! SyncSphorb()
-    :call job_start(['osascript', '~/.config/bin/sync_sphorb.scpt'])
+    silent execute "!osascript ~/.config/bin/sync_sphorb.scpt"
 endfunction
 
 function! SyncTGServices()
-    :call job_start(['osascript', '~/.config/bin/sync_tgservices.scpt'])
+    silent execute "!osascript ~/.config/bin/sync_tgservices.scpt"
 endfunction
 
 command! SyncKatamari call SyncKatamari()
 command! SyncTGServices call SyncTGServices()
 command! SyncSphorb call SyncSphorb()
-
 " this is minpac and replaces Vundle
 " mkdir -p ~/.config/nvim/pack/minpac/opt
 " cd ~/.config/nvim/pack/minpac/opt
@@ -305,3 +308,4 @@ command! SyncSphorb call SyncSphorb()
 "call minpac#add('SirVer/ultisnips')
 "call minpac#add('neurobashing/snipmate-snippets')
 "call minpac#add('ajh17/Spacegray.vim')
+"   sftp://gthomason@dev-gthomason//home/gthomason/proj/Sphorb/
