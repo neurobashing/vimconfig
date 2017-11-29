@@ -1,5 +1,6 @@
 set nocompatible " don't bother with vi compatibility
 filetype off " required for vundle
+set rtp+=/usr/local/opt/fzf
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " bundles here
@@ -19,7 +20,8 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 Plugin 'vimwiki/vimwiki'
-Plugin 'ctrlpvim/ctrlp.vim.git'
+" Plugin 'ctrlpvim/ctrlp.vim.git'
+Plugin 'junegunn/fzf.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'neurobashing/snipmate-snippets.git'
 Plugin 'tpope/vim-dispatch'
@@ -208,10 +210,12 @@ let g:syntastic_python_checkers=['flake8'] " use flake8 instead of pylint, for n
 cmap w!! w !sudo tee % > /dev/null
 
 " always open files in new buffers
-let g:ctrlp_switch_buffer = 0
+" let g:ctrlp_switch_buffer = 0
 " change the working directory during a Vim session and make CtrlP respect that change.
-let g:ctrlp_working_path_mode = 0
-nmap <C-s> :CtrlPBuffer<CR>
+" let g:ctrlp_working_path_mode = 0
+" nmap <C-s> :CtrlPBuffer<CR>
+nmap <C-p> :Buffers<CR>
+nmap <C-o> :Files<CR>
 
 if filereadable('/usr/local/bin/ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -229,6 +233,7 @@ if has("gui_macvim")
     let g:airline_powerline_fonts = 1
 endif
 let g:airline_section_z = ''
+let g:airline_section_b = ''
 let g:airline_theme='jellybeans'
 
 function! NumberToggle()
