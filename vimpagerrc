@@ -1,3 +1,5 @@
 " you have to do this, or it complains
 let g:less     = {}
 let g:less.enabled = 0
+set guifont=Hack:h14
+set bg=light
