@@ -1,6 +1,5 @@
 set nocompatible " don't bother with vi compatibility
 filetype off " required for vundle
-set rtp+=/usr/local/opt/fzf
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " bundles here
@@ -20,12 +19,12 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree.git'
 Plugin 'colepeters/spacemacs-theme.vim' " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
 Plugin 'vimwiki/vimwiki'
-" Plugin 'ctrlpvim/ctrlp.vim.git'
-Plugin 'junegunn/fzf.vim'
+Plugin 'ctrlpvim/ctrlp.vim.git'
 Plugin 'SirVer/ultisnips'
 Plugin 'neurobashing/snipmate-snippets.git'
 Plugin 'tpope/vim-dispatch'
 Plugin 'lifepillar/vim-solarized8'
+Plugin 'tpope/vim-unimpaired.git'
 call vundle#end()            " required
 syntax enable " enable syntax highlighting
 filetype plugin indent on " ensure ftdetect et al work by including this after the Vundle stuff
@@ -129,6 +128,9 @@ autocmd FileType sh setlocal ts=4 sts=4 sw=4
 autocmd FileType vim setlocal ts=4 sts=4 sw=4
 autocmd FileType zsh setlocal ts=4 sts=4 sw=4
 autocmd FileType perl setlocal noet ci pi ts=4 sts=0 sw=4
+" TODO: this needs to be such that it bases the soure dir off what dir I'm in
+" since tgservices etc.
+autocmd FileType perl setlocal makeprg=rsync\ -avz\ --exclude=data\ --exclude=images\ --exclude=blog\ --exclude=.git\ --exclude=.githooks\ --exclude=node_modules\ ~/proj/localsphorb/\ thinkgeek@dev:/home/thinkgeek/proj/Sphorb/
 
 " when you select a file in the loclist/quickfind, close it
 autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>
@@ -210,12 +212,10 @@ let g:syntastic_python_checkers=['flake8'] " use flake8 instead of pylint, for n
 cmap w!! w !sudo tee % > /dev/null
 
 " always open files in new buffers
-" let g:ctrlp_switch_buffer = 0
+let g:ctrlp_switch_buffer = 0
 " change the working directory during a Vim session and make CtrlP respect that change.
-" let g:ctrlp_working_path_mode = 0
-" nmap <C-s> :CtrlPBuffer<CR>
-nmap <C-p> :Buffers<CR>
-nmap <C-o> :Files<CR>
+let g:ctrlp_working_path_mode = 0
+nmap <C-s> :CtrlPBuffer<CR>
 
 if filereadable('/usr/local/bin/ag')
     let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -266,51 +266,36 @@ endif
 " why can't I fucking toggle with , dammit
 " map <C-i> :NERDTreeToggle<CR>
 
-" these call the DropSync configs.
-" the applescript looks like this:
-" tell application "DropSync 3"
-"   set our_store to store named "katamari"
-"   sync our_store direction DestinationRight
-" end tell
-" it looks like the whole thing fails if you call job_start
-function! SyncKatamari()
-    silent execute "!osascript ~/.config/bin/sync_katamari.scpt"
-endfunction
 
-function! SyncSphorb()
-    silent execute "!osascript ~/.config/bin/sync_sphorb.scpt"
-endfunction
+" sync sphorb like
+" rsync -avz --exclude=data --exclude=images --exclude=blog --exclude=.git --exclude=.githooks --exclude=node_modules ~/proj/localsphorb/ thinkgeek@dev:/home/thinkgeek/proj/Sphorb/
+" " this is a remidner about unimpaired
+" The following maps all correspond to normal mode commands.  If a count is
+" given, it becomes an argument to the command.  A mnemonic for the "a" commands
+" is "args" and for the "q" commands is "quickfix".
 
-function! SyncTGServices()
-    silent execute "!osascript ~/.config/bin/sync_tgservices.scpt"
-endfunction
+" *[a*     |:previous|
+" *]a*     |:next|
+" *[A*     |:first|
+" *]A*     |:last|
+" *[b*     |:bprevious|
+" *]b*     |:bnext|
+" *[B*     |:bfirst|
+" *]B*     |:blast|
+" *[l*     |:lprevious|
+" *]l*     |:lnext|
+" *[L*     |:lfirst|
+" *]L*     |:llast|
+" *[<C-L>* |:lpfile|
+" *]<C-L>* |:lnfile|
+" *[q*     |:cprevious|
+" *]q*     |:cnext|
+" *[Q*     |:cfirst|
+" *]Q*     |:clast|
+" *[<C-Q>* |:cpfile| (Note that <C-Q> only works in a terminal if you disable
+" *]<C-Q>* |:cnfile| flow control: stty -ixon)
+" *[t*     |:tprevious|
+" *]t*     |:tnext|
+" *[T*     |:tfirst|
+" *]T* |:tlast|
 
-command! SyncKatamari call SyncKatamari()
-command! SyncTGServices call SyncTGServices()
-command! SyncSphorb call SyncSphorb()
-" this is minpac and replaces Vundle
-" mkdir -p ~/.config/nvim/pack/minpac/opt
-" cd ~/.config/nvim/pack/minpac/opt
-" git clone https://github.com/k-takata/minpac.git
-"packadd minpac
-"call minpac#init()
-"" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
-"call minpac#add('k-takata/minpac', {'type': 'opt'})
-"call minpac#add('tpope/vim-commentary')
-"call minpac#add('majutsushi/tagbar')
-"call minpac#add('mtth/scratch.vim') " https://github.com/mtth/scratch.vim
-"call minpac#add('pangloss/vim-javascript')
-"call minpac#add('mustache/vim-mustache-handlebars') " https://github.com/mustache/vim-mustache-handlebars
-"call minpac#add('vim-perl/vim-perl') "https://github.com/vim-perl/vim-perl
-"call minpac#add('tpope/vim-fugitive')
-"call minpac#add('davidhalter/jedi-vim')
-"call minpac#add('nvie/vim-flake8')
-"call minpac#add('scrooloose/syntastic')
-"call minpac#add('scrooloose/nerdtree')
-"call minpac#add('colepeters/spacemacs-theme.vim') " colorscheme spacemacs-theme, https://github.com/colepeters/spacemacs-theme.vim
-"call minpac#add('vimwiki/vimwiki')
-"call minpac#add('ctrlpvim/ctrlp.vim')
-"call minpac#add('SirVer/ultisnips')
-"call minpac#add('neurobashing/snipmate-snippets')
-"call minpac#add('ajh17/Spacegray.vim')
-"   sftp://gthomason@dev-gthomason//home/gthomason/proj/Sphorb/
