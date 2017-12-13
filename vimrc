@@ -128,9 +128,6 @@ autocmd FileType sh setlocal ts=4 sts=4 sw=4
 autocmd FileType vim setlocal ts=4 sts=4 sw=4
 autocmd FileType zsh setlocal ts=4 sts=4 sw=4
 autocmd FileType perl setlocal noet ci pi ts=4 sts=0 sw=4
-" TODO: this needs to be such that it bases the soure dir off what dir I'm in
-" since tgservices etc.
-autocmd FileType perl setlocal makeprg=rsync\ -avz\ --exclude=data\ --exclude=images\ --exclude=blog\ --exclude=.git\ --exclude=.githooks\ --exclude=node_modules\ ~/proj/localsphorb/\ thinkgeek@dev:/home/thinkgeek/proj/Sphorb/
 
 " when you select a file in the loclist/quickfind, close it
 autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>
@@ -269,6 +266,15 @@ endif
 
 " sync sphorb like
 " rsync -avz --exclude=data --exclude=images --exclude=blog --exclude=.git --exclude=.githooks --exclude=node_modules ~/proj/localsphorb/ thinkgeek@dev:/home/thinkgeek/proj/Sphorb/
+" TODO: this needs to be such that it bases the soure dir off what dir I'm in
+" since tgservices etc.
+" it should really look @ the path of the current file or something.
+command -nargs=0 SyncSphorb :! ~/.config/bin/perlmake sphorb<CR>
+
+" since netrw is broken,
+" you can set autocmd BufRead scp://* :set bt=acwrite
+" to not have to Nwrite all the time
+
 " " this is a remidner about unimpaired
 " The following maps all correspond to normal mode commands.  If a count is
 " given, it becomes an argument to the command.  A mnemonic for the "a" commands
